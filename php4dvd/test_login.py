@@ -8,7 +8,7 @@ import unittest, time, re
 
 class Test_PHP4DVD(unittest.TestCase):
     def setUp(self):
-        self.driver = webdriver.Firefox()
+        self.driver = webdriver.Ie()
         self.driver.implicitly_wait(10)
         self.base_url = "http://localhost/php4dvd/"
         self.verificationErrors = []
