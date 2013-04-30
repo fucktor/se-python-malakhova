@@ -25,6 +25,7 @@ def logout(driver):
     WebDriverWait(driver, 10).until(lambda driver : driver.find_element_by_id("login"))
 
 def check_add_movies(driver):
+    time.sleep(3)
     AllMovies=driver.find_elements_by_xpath("//div[@class='title']")
     ListMovies=[]
     for l in AllMovies:
@@ -55,7 +56,7 @@ def search_movie(driver, nameMovie):
     s.clear()
     s.send_keys(nameMovie)
     s.send_keys(Keys.RETURN)
-    time.sleep(5)
+    WebDriverWait(driver, 10).until(invisibility_of_element_located((By.XPATH, "//div[@class='title'][.!='"+nameMovie+"']")))
 
 
 def check_search_valid_movie(driver, title, nameMovie):
@@ -87,13 +88,13 @@ def test_SearchMovies1(driver):
         assert check_search_valid_movie(driver, s, Test_Movie2)
     logout(driver)
 
+
 def test_SearchMovies2(driver):
     """поиск несуществующего в коллекции фильма"""
     driver.get(base_url)
     login(driver,username, password)
     search_movie(driver, Test_Movie3)
     AllMovies=driver.find_elements_by_xpath("//div[@class='title']")
-    print (len(AllMovies))
     assert check_search_invalid_movie(driver, len(AllMovies))
     logout(driver)
 

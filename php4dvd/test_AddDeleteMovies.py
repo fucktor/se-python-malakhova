@@ -48,15 +48,17 @@ def check_add_movie(driver, title, year):
 
 def check_movies(driver, name):
     WebDriverWait(driver, 5).until(presence_of_element_located((By.XPATH, "//div[@id='results']")))
+    time.sleep(3)
     AllMovies=driver.find_elements_by_xpath("//div[@class='title']")
-    ListMovies=[]
+    ListM=[]
     for l in AllMovies:
-        ListMovies.append(l.text)
-    print(ListMovies)
-    if name in ListMovies:
-        DeleteMovies(driver, name)
-    else:
-        pass
+        if l.text==name:
+            ListM.append(l.text)
+    if len(ListM)>-1:
+        for i in ListM:
+            DeleteMovies(driver, i)
+            time.sleep(2)
+
 
 def check_message_err(driver):
     try:
@@ -94,14 +96,7 @@ def test_AddMovies_Valid(driver, id, title, year):
     """добавление фильма в коллекцию с валидными данными"""
     driver.get(base_url)
     login(driver,username, password)
-    time.sleep(2)
-    AllMovies=driver.find_elements_by_xpath("//div[@class='title']")
-    ListMovies=[]
-    name=title
-    for l in AllMovies:
-        ListMovies.append(l.text)
-    if name in ListMovies:
-        DeleteMovies(driver, name)
+    check_movies(driver, title)
     AddMovies(driver, id, title, year)
     w=WebDriverWait(driver, 10).until(lambda driver : driver.find_element_by_xpath("//div[@class='content']/div[@id='movie']"))
     assert check_add_movie(driver, title, year)
